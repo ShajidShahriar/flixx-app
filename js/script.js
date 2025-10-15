@@ -7,6 +7,7 @@ const global = {
 function init() {
   switch (global.currentPage) {
     case "/":
+    case "/index.html":
       console.log("home");
       break;
     case "/shows.html":
