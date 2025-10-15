@@ -3,7 +3,14 @@ const global = {
 };
 
 //init app
-
+function highlightActiveLink() {
+  const links = document.querySelectorAll(".nav-link");
+  links.forEach((link) => {
+    if (link.getAttribute("href") === global.currentPage) {
+      link.classList.add("active");
+    }
+  });
+}
 function init() {
   switch (global.currentPage) {
     case "/":
@@ -23,6 +30,7 @@ function init() {
       console.log("search");
       break;
   }
+  highlightActiveLink()
 }
 
 document.addEventListener("DOMContentLoaded", init);
