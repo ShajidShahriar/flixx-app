@@ -12,7 +12,7 @@ class App {
     switch (this.currentPage) {
       case "/":
       case "/index.html":
-        this.displayPopularMovies()
+        this.displayPopularMovies();
         break;
       case "/shows.html":
         console.log("shows");
@@ -38,26 +38,50 @@ class App {
       }
     });
   }
-  //public methods 
-  async displayPopularMovies(){
-    const {results} = await this._fetchAPIData('movie/popular')
-    console.log(results)
-    
+  //public methods
+  async displayPopularMovies() {
+    const { results } = await this._fetchAPIData("movie/popular");
+    console.log(results);
+
+    results.forEach((movie) => {
+      const div = document.createElement("div");
+      div.classList.add("card");
+      div.innerHTML = `
+            <a href="movie-details.html?id=1">
+              ${movie.poster_path ?
+              `<img
+                src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                class="card-img-top"
+                alt="${movie.title}"
+              />` : `<img
+                src="images/no-image.jpg"
+                class="card-img-top"
+                alt="${movie.title}"
+              />`}
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">${movie.title}</h5>
+              <p class="card-text">
+                <small class="text-muted">${movie.release_date}</small>
+              </p>
+            </div>
+          `;
+          document.querySelector("#popular-movies").appendChild(div)
+    });
   }
 
-  //private methods 
-  async _fetchAPIData(endpoint){
-    const API_KEY = this.api.key
-    const API_URL = this.api.baseUrl
+  //private methods
+  async _fetchAPIData(endpoint) {
+    const API_KEY = this.api.key;
+    const API_URL = this.api.baseUrl;
 
-
-    const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&Language=en_US`)
-    const data = await response.json()
-    return data
-
+    const response = await fetch(
+      `${API_URL}${endpoint}?api_key=${API_KEY}&Language=en_US`
+    );
+    const data = await response.json();
+    return data;
   }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const app = new App();
