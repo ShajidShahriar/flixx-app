@@ -15,7 +15,7 @@ class App {
         this.displayPopularMovies();
         break;
       case "/shows.html":
-        this.displayPopularTv();
+        this.displayPopularShows();
         break;
       case "/movie-details.html":
         console.log("movies ");
@@ -70,7 +70,7 @@ class App {
     });
   }
 
-async displayPopularTv() {
+async displayPopularShows() {
     const { results } = await this._fetchAPIData("tv/popular");
     console.log(results);
 
