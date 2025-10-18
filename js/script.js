@@ -82,16 +82,16 @@ async displayPopularShows() {
             `<img
               src="https://image.tmdb.org/t/p/w500${tv.poster_path}"
               class="card-img-top"
-              alt="${tv.title}"
+              alt="${tv.name}"
             />` : `<img
               src="images/no-image.jpg"
               class="card-img-top"
-              alt="${tv.title}"
+              alt="${tv.name}"
             />`}
 
           </a>
           <div class="card-body">
-            <h5 class="card-title">${tv.title}</h5>
+            <h5 class="card-title">${tv.name}</h5>
             <p class="card-text">
               <small class="text-muted">${tv.first_air_date}</small>
             </p>
