@@ -15,7 +15,7 @@ class App {
         this.displayPopularMovies();
         break;
       case "/shows.html":
-        console.log("shows");
+        this.displayPopularTv();
         break;
       case "/movie-details.html":
         console.log("movies ");
@@ -69,6 +69,41 @@ class App {
           document.querySelector("#popular-movies").appendChild(div)
     });
   }
+
+async displayPopularTv() {
+    const { results } = await this._fetchAPIData("tv/popular");
+    console.log(results);
+
+    results.forEach((tv) => {
+      const div = document.createElement("div");
+      div.classList.add("card");
+      div.innerHTML = `<a href="tv-details.html?id=1">
+            ${tv.poster_path ?
+            `<img
+              src="https://image.tmdb.org/t/p/w500${tv.poster_path}"
+              class="card-img-top"
+              alt="${tv.title}"
+            />` : `<img
+              src="images/no-image.jpg"
+              class="card-img-top"
+              alt="${tv.title}"
+            />`}
+
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">${tv.title}</h5>
+            <p class="card-text">
+              <small class="text-muted">${tv.first_air_date}</small>
+            </p>
+          </div>
+          `;
+        document.querySelector("#popular-shows").appendChild(div)
+
+          
+    });
+  }
+
+
 
   //private methods
   async _fetchAPIData(endpoint) {
