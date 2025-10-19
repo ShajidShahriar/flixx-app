@@ -15,6 +15,7 @@ class App {
         this.displayPopularMovies();
         break;
       case "/shows.html":
+        this._showSpinner()
         this.displayPopularShows();
         break;
       case "/movie-details.html":
@@ -40,7 +41,9 @@ class App {
   }
   //public methods
   async displayPopularMovies() {
+    this._showSpinner()
     const { results } = await this._fetchAPIData("movie/popular");
+    this._hidespinner()
     console.log(results);
 
     results.forEach((movie) => {
@@ -48,16 +51,19 @@ class App {
       div.classList.add("card");
       div.innerHTML = `
             <a href="movie-details.html?id=1">
-              ${movie.poster_path ?
-              `<img
+              ${
+                movie.poster_path
+                  ? `<img
                 src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
                 class="card-img-top"
                 alt="${movie.title}"
-              />` : `<img
+              />`
+                  : `<img
                 src="images/no-image.jpg"
                 class="card-img-top"
                 alt="${movie.title}"
-              />`}
+              />`
+              }
             </a>
             <div class="card-body">
               <h5 class="card-title">${movie.title}</h5>
@@ -66,28 +72,33 @@ class App {
               </p>
             </div>
           `;
-          document.querySelector("#popular-movies").appendChild(div)
+      document.querySelector("#popular-movies").appendChild(div);
     });
   }
 
-async displayPopularShows() {
+  async displayPopularShows() {
+    this._showSpinner()
     const { results } = await this._fetchAPIData("tv/popular");
+    this._hidespinner()
     console.log(results);
 
     results.forEach((tv) => {
       const div = document.createElement("div");
       div.classList.add("card");
       div.innerHTML = `<a href="tv-details.html?id=1">
-            ${tv.poster_path ?
-            `<img
+            ${
+              tv.poster_path
+                ? `<img
               src="https://image.tmdb.org/t/p/w500${tv.poster_path}"
               class="card-img-top"
               alt="${tv.name}"
-            />` : `<img
+            />`
+                : `<img
               src="images/no-image.jpg"
               class="card-img-top"
               alt="${tv.name}"
-            />`}
+            />`
+            }
 
           </a>
           <div class="card-body">
@@ -97,13 +108,9 @@ async displayPopularShows() {
             </p>
           </div>
           `;
-        document.querySelector("#popular-shows").appendChild(div)
-
-          
+      document.querySelector("#popular-shows").appendChild(div);
     });
   }
-
-
 
   //private methods
   async _fetchAPIData(endpoint) {
@@ -116,7 +123,15 @@ async displayPopularShows() {
     const data = await response.json();
     return data;
   }
+  _showSpinner() {
+    document.querySelector(".spinner").classList.add("show");
+  }
+  _hidespinner() {
+    document.querySelector(".spinner").classList.remove("show");
+  }
 }
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const app = new App();
