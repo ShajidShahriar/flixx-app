@@ -19,6 +19,7 @@ class App {
         this.displayPopularShows();
         break;
       case "/movie-details.html":
+        this.displayMovieDetails()
         console.log("movies ");
         break;
       case "/tv-details.html":
@@ -110,6 +111,10 @@ class App {
           `;
       document.querySelector("#popular-shows").appendChild(div);
     });
+  }
+  async displayMovieDetails(){
+    const movie = await this._fetchAPIData("movie/1156594")
+    console.log(movie)
   }
 
   //private methods
