@@ -118,8 +118,11 @@ class App {
     const movieId = urlParams.get('id')
     console.log(movieId)
 
-
+    this._showSpinner()
     const movie = await this._fetchAPIData(`movie/${movieId}`)
+    
+    this._setBackdrop(movie.backdrop_path)
+    this._hidespinner()
     console.log(movie)
     const detailsContainer = document.querySelector(".movie-details")
     detailsContainer.innerHTML = `
@@ -142,7 +145,7 @@ class App {
             <h2>${movie.original_title}</h2>
             <p>
               <i class="fas fa-star text-primary"></i>
-              8 / 10
+              ${movie.vote_average.toFixed(1)}/10
             </p>
             <p class="text-muted">Release Date:${movie.release_date}</p>
             <p>
@@ -152,7 +155,7 @@ class App {
             <ul class="list-group">
               ${movie.genres.map(genre => `<li>${genre.name}</li>`).join('')}
             </ul>
-            <a href="#" target="_blank" class="btn">Visit Movie Homepage</a>
+            <a href="${movie.homepage}" target="_blank" class="btn">Visit Movie Homepage</a>
           </div>
         </div>
         <div class="details-bottom">
@@ -185,6 +188,16 @@ class App {
   }
   _hidespinner() {
     document.querySelector(".spinner").classList.remove("show");
+  }
+  _setBackdrop(path){
+    const backdropUrl = `https://image.tmdb.org/t/p/original${path}`
+    const backdropEl =  document.body
+    backdropEl.style.backgroundImage = `url(${backdropUrl})`
+
+    backdropEl.style.backgroundSize = 'cover';
+    backdropEl.style.backgroundPosition = 'center';
+    backdropEl.style.backgroundRepeat = 'no-repeat';
+
   }
 }
 
