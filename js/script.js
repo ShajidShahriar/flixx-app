@@ -121,10 +121,9 @@ class App {
     this._showSpinner()
     const movie = await this._fetchAPIData(`movie/${movieId}`)
     
-    this._setBackdrop(movie.backdrop_path)
     this._hidespinner()
     console.log(movie)
-    const detailsContainer = document.querySelector(".movie-details")
+    const detailsContainer = document.querySelector("#movie-details")
     detailsContainer.innerHTML = `
         <div class="details-top">
           <div>
@@ -170,6 +169,8 @@ class App {
           <div class="list-group">${movie.production_companies.map(company => ` ${company.name}`)}</div>
         </div>
       `
+      this._setBackdrop(movie.backdrop_path,"movie")
+
   }
 
   //private methods
@@ -189,15 +190,29 @@ class App {
   _hidespinner() {
     document.querySelector(".spinner").classList.remove("show");
   }
-  _setBackdrop(path){
+  _setBackdrop(path,type){
     const backdropUrl = `https://image.tmdb.org/t/p/original${path}`
-    const backdropEl =  document.body
-    backdropEl.style.backgroundImage = `url(${backdropUrl})`
+    const overlayDiv = document.createElement('div')
+    overlayDiv.style.backgroundImage = `url(${backdropUrl})`
 
-    backdropEl.style.backgroundSize = 'cover';
-    backdropEl.style.backgroundPosition = 'center';
-    backdropEl.style.backgroundRepeat = 'no-repeat';
+   overlayDiv.style.position = 'fixed'; // Position it relative to the viewport
+    overlayDiv.style.top = '0';
+    overlayDiv.style.left = '0';
+    overlayDiv.style.width = '100vw';  // 100% viewport width
+    overlayDiv.style.height = '100vh'; // 100% viewport height
+    // -----------------------
 
+
+    overlayDiv.style.zIndex = '-1'; // Now this will work
+    overlayDiv.style.opacity = '0.1'; // 10% opacity (very faint)
+
+    if(type === "movie"){
+      document.querySelector("#movie-details").appendChild(overlayDiv)
+    }
+    else{
+      document.querySelector("#show-details").appendChild(overlayDiv)
+
+    }
   }
 }
 
