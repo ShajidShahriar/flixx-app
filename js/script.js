@@ -12,6 +12,7 @@ class App {
     switch (this.currentPage) {
       case "/":
       case "/index.html":
+        this.displaySlider();
         this.displayPopularMovies();
         break;
       case "/shows.html":
@@ -47,7 +48,6 @@ class App {
     this._showSpinner();
     const { results } = await this._fetchAPIData("movie/popular");
     this._hidespinner();
-    console.log(results);
 
     results.forEach((movie) => {
       const movieID = movie.id;
@@ -253,7 +253,59 @@ class App {
     this._setBackdrop(show.backdrop_path, "show");
   }
 
+  //display slider movies
+
+  async displaySlider() {
+    const { results } = await this._fetchAPIData("movie/now_playing");
+    console.log(results);
+
+    results.forEach((movie) => {
+      const div = document.createElement("div");
+      div.classList.add("swiper-slide");
+
+      div.innerHTML = `
+            <a href="movie-details.html?id=${movie.id}">
+              <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+            </a>
+            <h4 class="swiper-rating">
+              <i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(1)} / 10
+            </h4>
+          
+      `;
+      document.querySelector(".swiper-wrapper").appendChild(div)
+    }
+  );
+    this._initSwiper()
+  }
+
   //private methods
+  _initSwiper(){
+    const swiper = new Swiper('.swiper', {
+      sldiesPerView: 1,
+      spaceBetween: 30,
+      freeMode: true,
+      loop: true,
+      autoplay:{
+        delay: 4000,
+        disableOnInteraction: false
+      },
+      breakpoints:{
+        500:{
+          slidesPerView:2
+        },
+        700:{
+          slidesPerView:3
+        },
+        1200:{
+          slidesPerView:4
+        },
+        
+      }
+
+  
+    })
+  }
+
   async _fetchAPIData(endpoint) {
     const API_KEY = this.api.key;
     const API_URL = this.api.baseUrl;
