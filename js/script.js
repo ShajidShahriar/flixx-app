@@ -8,7 +8,7 @@ class App {
     this.searchState = {
       term: '',
       type: '',
-      page: '',
+      page: 1,
       totalPages: 1,
       totalResults: 0,
 
@@ -316,6 +316,10 @@ class App {
   }
 
   displaySearchItems(results){
+    document.querySelector("#search-results").innerHTML = ''
+    document.querySelector("#search-results-heading").innerHTML = ''
+    document.querySelector("#pagination").innerHTML = ''
+
     results.forEach((result) => {
       const div = document.createElement("div");
       div.classList.add("card");
@@ -346,6 +350,42 @@ class App {
       <h2>${results.length} of ${this.searchState.totalResults} results for ${this.searchState.term}<h2>`
       document.querySelector("#search-results").appendChild(div);
     })
+    this.displayPagination()
+  }
+  displayPagination(){
+    const div = document.createElement('div')
+    div.classList.add("pagination")
+
+    div.innerHTML = `
+  
+          <button class="btn btn-primary" id="prev">Prev</button>
+          <button class="btn btn-primary" id="next">Next</button>
+          <div class="page-counter">Page ${this.searchState.page} of ${this.searchState.totalPages}</div>
+        `
+      document.querySelector("#pagination").appendChild(div)
+
+      //disaple prev on first page 
+      if(this.searchState.page === 1){
+        document.querySelector("#prev").disabled = true
+      }
+      //disable next on last page 
+       if(this.searchState.page === this.searchState.totalPages){
+        document.querySelector("#next").disabled = true
+      }
+      //next page 
+      document.querySelector("#next").addEventListener('click',async() => {
+        this.searchState.page++
+        const {results,totalPages} = await this._searchAPIData()
+        this.displaySearchItems(results)
+      })
+      //prev page 
+      document.querySelector("#prev").addEventListener('click',async() => {
+        this.searchState.page--
+        const {results,totalPages} = await this._searchAPIData()
+        this.displaySearchItems(results)
+      })
+
+
   }
 
   //private methods
@@ -391,7 +431,7 @@ class App {
     const API_URL = this.api.baseUrl;
 
     const response = await fetch(
-      `${API_URL}search/${this.searchState.type}?api_key=${API_KEY}&Language=en_US&query=${this.searchState.term}`
+      `${API_URL}search/${this.searchState.type}?api_key=${API_KEY}&language=en_US&query=${this.searchState.term}&page=${this.searchState.page}`
     );
     const data = await response.json();
     return data;
