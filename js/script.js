@@ -265,17 +265,26 @@ class App {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString)
 
-    this.search.type = urlParams.get('type')
-    this.search.term = urlParams.get('search-term')
+    this.searchState.type = urlParams.get('type')
+    this.searchState.term = urlParams.get('search-term')
 
 
-    if (this.search.term !== '' && this.search.term !== null){
-      //@todo- make request
+    if (this.searchState.term !== '' && this.searchState.term !== null){
+      const { results, total_pages ,page } = await this._searchAPIData()
+      console.log(results)
+      if(results.length === 0){
+        this._showAlert("no items found ","error")
+        return
+      }
+      this.displaySearchItems(results)
+     
+    document.querySelector("#search-value").value = ''
     }else{
-      this._showAlert("please enter a search term")
+      this._showAlert("please enter a search term","error")
     }
   }
   //display slider movies
+
 
   async displaySlider() {
     const { results } = await this._fetchAPIData("movie/now_playing");
@@ -300,7 +309,36 @@ class App {
     this._initSwiper()
   }
 
-
+  displaySearchItems(results){
+    results.forEach((result) => {
+      const div = document.createElement("div");
+      div.classList.add("card");
+      div.innerHTML = `
+            <a href="${this.searchState.type}-details.html?id=${result.id}">
+              ${
+                result.poster_path
+                  ? `<img
+                src="https://image.tmdb.org/t/p/w500/${result.poster_path}"
+                class="card-img-top"
+                alt="${this.searchState.type === 'movie' ? result.title : result.name}"
+              />`
+                  : `<img
+                src="images/no-image.jpg"
+                class="card-img-top"
+                alt="${this.searchState.type === 'movie' ? result.title : result.name}"
+              />`
+              }
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">${this.searchState.type === 'movie' ? result.title : result.name}</h5>
+              <p class="card-text">
+                <small class="text-muted">${this.searchState.type === 'movie' ? result.release_date : result.first_air_date}</small>
+              </p>
+            </div>
+          `;
+      document.querySelector("#search-results").appendChild(div);
+    })
+  }
 
   //private methods
   _initSwiper(){
@@ -340,6 +378,18 @@ class App {
     const data = await response.json();
     return data;
   }
+  async _searchAPIData() {
+    const API_KEY = this.api.key;
+    const API_URL = this.api.baseUrl;
+
+    const response = await fetch(
+      `${API_URL}search/${this.searchState.type}?api_key=${API_KEY}&Language=en_US&query=${this.searchState.term}`
+    );
+    const data = await response.json();
+    return data;
+  }
+
+
   _showSpinner() {
     document.querySelector(".spinner").classList.add("show");
   }
