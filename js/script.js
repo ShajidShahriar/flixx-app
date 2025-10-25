@@ -5,6 +5,13 @@ class App {
       key: "76d1c5112ca81a0c8a3286859b2a5a57",
       baseUrl: "https://api.themoviedb.org/3/",
     };
+    this.searchState = {
+      term: '',
+      type: '',
+      page: '',
+      totalPages: 1,
+
+    }
     this.init();
   }
 
@@ -28,6 +35,7 @@ class App {
         console.log("tv");
         break;
       case "/search.html":
+        this.search()
         console.log("search");
         break;
     }
@@ -253,6 +261,20 @@ class App {
     this._setBackdrop(show.backdrop_path, "show");
   }
 
+  async search(){
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+
+    this.search.type = urlParams.get('type')
+    this.search.term = urlParams.get('search-term')
+
+
+    if (this.search.term !== '' && this.search.term !== null){
+      //@todo- make request
+    }else{
+      this._showAlert("please enter a search term")
+    }
+  }
   //display slider movies
 
   async displaySlider() {
@@ -277,6 +299,8 @@ class App {
   );
     this._initSwiper()
   }
+
+
 
   //private methods
   _initSwiper(){
@@ -343,6 +367,17 @@ class App {
       document.querySelector("#show-details").appendChild(overlayDiv);
     }
   }
+  _showAlert(message,className){
+    const alertEl = document.createElement('div')
+    alertEl.classList.add('alert',className)
+    alertEl.appendChild(document.createTextNode(message))
+    document.querySelector('#alert').appendChild(alertEl)
+
+    setTimeout(() => alertEl.remove()
+
+    , 3000)
+  }
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
