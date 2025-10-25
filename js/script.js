@@ -10,6 +10,7 @@ class App {
       type: '',
       page: '',
       totalPages: 1,
+      totalResults: 0,
 
     }
     this.init();
@@ -270,12 +271,17 @@ class App {
 
 
     if (this.searchState.term !== '' && this.searchState.term !== null){
-      const { results, total_pages ,page } = await this._searchAPIData()
+      const { results, total_pages ,page, total_results } = await this._searchAPIData()
       console.log(results)
       if(results.length === 0){
         this._showAlert("no items found ","error")
         return
       }
+
+      this.searchState.totalPages = total_pages
+      this.searchState.page = page
+      this.searchState.totalResults = total_results
+      
       this.displaySearchItems(results)
      
     document.querySelector("#search-value").value = ''
@@ -336,6 +342,8 @@ class App {
               </p>
             </div>
           `;
+      document.querySelector("#search-results-heading").innerHTML = `
+      <h2>${results.length} of ${this.searchState.totalResults} results for ${this.searchState.term}<h2>`
       document.querySelector("#search-results").appendChild(div);
     })
   }
