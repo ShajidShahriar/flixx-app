@@ -423,7 +423,7 @@ class App {
     const API_URL = this.api.baseUrl;
 
     const response = await fetch(
-      `${API_URL}${endpoint}?api_key=${API_KEY}&language=en_US`
+      `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`
     );
     const data = await response.json();
     return data;
@@ -433,7 +433,7 @@ class App {
     const API_URL = this.api.baseUrl;
 
     const response = await fetch(
-      `${API_URL}search/${this.searchState.type}?api_key=${API_KEY}&language=en_US&query=${this.searchState.term}&page=${this.searchState.page}`
+      `${API_URL}search/${this.searchState.type}?api_key=${API_KEY}&language=en-US&query=${this.searchState.term}&page=${this.searchState.page}`
     );
     const data = await response.json();
     return data;
