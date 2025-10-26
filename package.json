@@ -1,11 +1,8 @@
 {
   "name": "flixx-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "private": true,
+  "description": "A movie and TV show browsing app built with vanilla JavaScript, Webpack, and the TMDB API.",
   "scripts": {
     "start": "webpack serve",
     "build": "webpack --mode production",
@@ -15,8 +12,14 @@
     "type": "git",
     "url": "git+https://github.com/ShajidShahriar/flixx-app.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "javascript",
+    "webpack",
+    "movie-app",
+    "tmdb",
+    "api"
+  ],
+  "author": "Shajid Shahriar",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ShajidShahriar/flixx-app/issues"
