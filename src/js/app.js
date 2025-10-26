@@ -1,10 +1,12 @@
 import Swiper from 'swiper';
 import noImage from '../images/no-image.jpg'; 
+import { TMDB_API_KEY } from './config.js';
+
 class App {
   constructor() {
     this.currentPage = window.location.pathname;
     this.api = {
-      key: process.env.TMDB_API_KEY,
+      key: TMDB_API_KEY,
       baseUrl: "https://api.themoviedb.org/3/",
     };
     this.searchState = {
