@@ -1,8 +1,10 @@
+import Swiper from 'swiper';
+import noImage from '../images/no-image.jpg'; 
 class App {
   constructor() {
     this.currentPage = window.location.pathname;
     this.api = {
-      key: "76d1c5112ca81a0c8a3286859b2a5a57",
+      key: process.env.TMDB_API_KEY,
       baseUrl: "https://api.themoviedb.org/3/",
     };
     this.searchState = {
@@ -72,7 +74,7 @@ class App {
                 alt="${movie.title}"
               />`
                   : `<img
-                src="images/no-image.jpg"
+                src="${noImage}"
                 class="card-img-top"
                 alt="${movie.title}"
               />`
@@ -108,7 +110,7 @@ class App {
               alt="${tv.name}"
             />`
                 : `<img
-              src="images/no-image.jpg"
+              src="${noImage}"
               class="card-img-top"
               alt="${tv.name}"
             />`
@@ -148,7 +150,7 @@ class App {
                 alt="${movie.original_title}"
                 />`
               : `<img
-                src="images/no-image.jpg"
+                src="${noImage}"
                 class="card-img-top"
                 alt="${movie.original_title}"
                 />`
@@ -217,7 +219,7 @@ class App {
                 alt="${show.name}"
                 />`
                 : `<img
-                src="images/no-image.jpg"
+                src="${noImage}"
                 class="card-img-top"
                 alt="${show.name}"
                 />`
@@ -284,7 +286,7 @@ class App {
       
       this.displaySearchItems(results)
      
-    document.querySelector("#search-value").value = ''
+    document.querySelector("#search-term").value = ''
     }else{
       this._showAlert("please enter a search term","error")
     }
@@ -333,7 +335,7 @@ class App {
                 alt="${this.searchState.type === 'movie' ? result.title : result.name}"
               />`
                   : `<img
-                src="images/no-image.jpg"
+                src="${noImage}"
                 class="card-img-top"
                 alt="${this.searchState.type === 'movie' ? result.title : result.name}"
               />`
@@ -391,7 +393,7 @@ class App {
   //private methods
   _initSwiper(){
     const swiper = new Swiper('.swiper', {
-      sldiesPerView: 1,
+      slidesPerView: 1,
       spaceBetween: 30,
       freeMode: true,
       loop: true,
@@ -421,7 +423,7 @@ class App {
     const API_URL = this.api.baseUrl;
 
     const response = await fetch(
-      `${API_URL}${endpoint}?api_key=${API_KEY}&Language=en_US`
+      `${API_URL}${endpoint}?api_key=${API_KEY}&language=en_US`
     );
     const data = await response.json();
     return data;
@@ -491,6 +493,6 @@ class App {
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const app = new App();
-});
+
+
+export default App;
