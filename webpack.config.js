@@ -1,8 +1,7 @@
 // webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack'); 
-
+const webpack = require('webpack'); // <-- ADD THIS
 module.exports = {
   // 1. Set the mode to development for a working server
   mode: 'development',
@@ -53,8 +52,9 @@ module.exports = {
   plugins: [
     // This plugin will generate an index.html in /dist
     // You need one of these for EVERY HTML page you have!
-    new Dotenv(),
-    
+  new webpack.DefinePlugin({
+  'process.env.TMDB_API_KEY': JSON.stringify(process.env.TMDB_API_KEY)
+}),    
     new HtmlWebpackPlugin({
       title: 'Flixx | Home',
       filename: 'index.html',
