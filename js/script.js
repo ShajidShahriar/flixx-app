@@ -177,10 +177,10 @@ class App {
           <h2>Movie Info</h2>
           <ul>
             <li><span class="text-secondary">Budget:</span> ${
-              movie.budget
+              this._addCommasToNumber(movie.budget)
             } </li>
             <li><span class="text-secondary">Revenue:</span> ${
-              movie.revenue
+              this._addCommasToNumber(movie.revenue)
             }</li>
             <li><span class="text-secondary">Runtime:</span> ${
               movie.runtime
@@ -474,6 +474,19 @@ class App {
     setTimeout(() => alertEl.remove()
 
     , 3000)
+  }
+  _addCommasToNumber(number) {
+    // Check if the number is valid and greater than 0
+    if (number === 0 || !number) {
+        return 'N/A';
+    }
+    
+    // Use Intl.NumberFormat for professional currency formatting
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0, // Ensures no .00 cents are shown
+    }).format(number);
   }
 
 }
